@@ -10,6 +10,8 @@ Main Components:
 - PRDGenerator: Generates comprehensive PRDs from interview data
 - EvolutionTracker: Enables self-learning from past interactions
 - PluginMarketplace: Recommends and bundles Claude Code plugins
+- PluginGenerator: Generates actual plugin packages from requirements
+- MarketplaceBuilder: Creates GitHub-ready plugin marketplaces
 - Data Models: Complete schema for interview knowledge graphs
 
 Example:
@@ -19,6 +21,7 @@ Example:
         InterviewAgent,
         PRDGenerator,
         PluginMarketplace,
+        PluginGenerator,
         create_interview_system
     )
 
@@ -32,9 +35,13 @@ Example:
     session = InterviewSession(user=User(...))
     result = await system(session)
 
-    # Get PRD and plugin recommendations
-    print(result.prd.executive_summary)
-    print(f"Recommended {len(result.prd.plugin_recommendations)} plugins")
+    # Generate PRD and plugins
+    prd_gen = PRDGenerator(...)
+    prd = await prd_gen(result.session)
+
+    # Generate installable plugins
+    plugin_gen = PluginGenerator()
+    plugins = plugin_gen.generate_bundle_from_prd(prd)
     ```
 """
 
@@ -79,6 +86,14 @@ from .interview_agent import InterviewAgent
 from .prd_generator import PRDGenerator
 from .evolution_tracker import EvolutionTracker, AdaptiveQuestionGenerator
 from .plugin_marketplace import PluginMarketplace
+from .plugin_packaging import (
+    PluginGenerator,
+    MarketplaceBuilder,
+    PluginTemplate,
+    CommandPlugin,
+    MCPPlugin,
+    SkillPlugin,
+)
 
 
 __all__ = [
@@ -88,6 +103,13 @@ __all__ = [
     "EvolutionTracker",
     "AdaptiveQuestionGenerator",
     "PluginMarketplace",
+    # Plugin packaging
+    "PluginGenerator",
+    "MarketplaceBuilder",
+    "PluginTemplate",
+    "CommandPlugin",
+    "MCPPlugin",
+    "SkillPlugin",
     # Entities
     "User",
     "Requirement",
